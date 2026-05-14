@@ -1,0 +1,65 @@
+### Đăng ký tài khoản
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser2",
+  "password": "password123"
+}
+
+###
+
+### Đăng nhập bằng Password
+POST http://localhost:8080/api/auth/login-password
+Content-Type: application/json
+
+{
+  "username": "testuser2",
+  "password": "password123"
+}
+
+###
+
+### Cập nhật trạng thái khuôn mặt (Yêu cầu Token)
+# Lưu ý: Thay YOUR_TOKEN_HERE bằng chuỗi token lấy được từ bước Đăng nhập phía trên
+POST http://localhost:8080/api/auth/update-face-status
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIiLCJpYXQiOjE3Nzg3NDI3NTMsImV4cCI6MTc3ODgyOTE1M30.EPyowgPMuoXQln58GkgARftCOcpFvoaESO9PWt8ORyg
+
+{
+  "username": "testuser"
+}
+
+###
+
+### ====================================================
+### TEST FASTAPI (PORT 8000 - AI BACKEND)
+### ====================================================
+
+### Đăng ký khuôn mặt (Lấy ảnh có sẵn test thử)
+POST http://localhost:8000/api/face/register
+Content-Type: multipart/form-data; boundary=FaceBoundary
+
+--FaceBoundary
+Content-Disposition: form-data; name="username"
+
+testuser
+--FaceBoundary
+Content-Disposition: form-data; name="file"; filename="user_face.jpg"
+Content-Type: image/jpeg
+
+< ../face_recognition/tes1.jpg
+--FaceBoundary--
+
+###
+
+### Nhận diện khuôn mặt (Mô phỏng lúc bạn quét mặt vào)
+POST http://localhost:8000/api/face/recognize
+Content-Type: multipart/form-data; boundary=FaceBoundary
+
+--FaceBoundary
+Content-Disposition: form-data; name="file"; filename="test2.jpg"
+Content-Type: image/jpeg
+
+< ../face_recognition/user_face.jpg
+--FaceBoundary--
