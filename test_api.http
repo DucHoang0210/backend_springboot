@@ -1,30 +1,63 @@
-### Đăng ký tài khoản
+### Đăng ký tài khoản (Tạo User)
 POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "testuser2",
+  "username": "testuser",
   "password": "password123"
 }
 
 ###
 
-### Đăng nhập bằng Password
+### Đăng nhập bằng Password truyền thống (Cấp JWT & Lưu Session)
+# @name traditionalLogin
 POST http://localhost:8080/api/auth/login-password
 Content-Type: application/json
 
 {
-  "username": "testuser2",
+  "username": "testuser",
   "password": "password123"
 }
 
 ###
 
-### Cập nhật trạng thái khuôn mặt (Yêu cầu Token)
-# Lưu ý: Thay YOUR_TOKEN_HERE bằng chuỗi token lấy được từ bước Đăng nhập phía trên
+### Đăng ký khuôn mặt cho tài khoản (Java -> Python -> PostgreSQL)
+# Lưu ý: Gửi Multipart Form chứa username và file ảnh khuôn mặt của bạn
+POST http://localhost:8080/api/auth/register-face
+Content-Type: multipart/form-data; boundary=FaceBoundary
+
+--FaceBoundary
+Content-Disposition: form-data; name="username"
+
+testuser
+--FaceBoundary
+Content-Disposition: form-data; name="file"; filename="user_face.jpg"
+Content-Type: image/jpeg
+
+< ./face_recognition/user_face.jpg
+--FaceBoundary--
+
+###
+
+### Đăng nhập bằng Khuôn mặt (Java -> Python AI -> Tạo JWT & Session)
+# @name faceLogin
+POST http://localhost:8080/api/auth/login-face
+Content-Type: multipart/form-data; boundary=FaceBoundary
+
+--FaceBoundary
+Content-Disposition: form-data; name="file"; filename="user_face.jpg"
+Content-Type: image/jpeg
+
+< ./face_recognition/user_face.jpg
+--FaceBoundary--
+
+###
+
+### Cập nhật trạng thái khuôn mặt (Yêu cầu JWT Token còn hiệu lực)
+# Lấy token từ bước traditionalLogin hoặc faceLogin phía trên điền vào đây
 POST http://localhost:8080/api/auth/update-face-status
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIiLCJpYXQiOjE3Nzg3NDI3NTMsImV4cCI6MTc3ODgyOTE1M30.EPyowgPMuoXQln58GkgARftCOcpFvoaESO9PWt8ORyg
+Authorization: Bearer YOUR_TOKEN_HERE
 
 {
   "username": "testuser"
@@ -32,11 +65,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlcjIiLCJpYXQiOjE3N
 
 ###
 
+### Đăng xuất (Vô hiệu hóa Token & Session trong Database)
+POST http://localhost:8080/api/auth/logout
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
 ### ====================================================
-### TEST FASTAPI (PORT 8000 - AI BACKEND)
+### TEST FASTAPI TRỰC TIẾP (PORT 8000 - AI BACKEND)
 ### ====================================================
 
-### Đăng ký khuôn mặt (Lấy ảnh có sẵn test thử)
+### Đăng ký khuôn mặt trực tiếp với FastAPI
 POST http://localhost:8000/api/face/register
 Content-Type: multipart/form-data; boundary=FaceBoundary
 
@@ -48,18 +87,19 @@ testuser
 Content-Disposition: form-data; name="file"; filename="user_face.jpg"
 Content-Type: image/jpeg
 
-< ../face_recognition/tes1.jpg
+< ./face_recognition/tes1.jpg
 --FaceBoundary--
 
 ###
 
-### Nhận diện khuôn mặt (Mô phỏng lúc bạn quét mặt vào)
+### Nhận diện khuôn mặt trực tiếp với FastAPI
 POST http://localhost:8000/api/face/recognize
 Content-Type: multipart/form-data; boundary=FaceBoundary
 
 --FaceBoundary
-Content-Disposition: form-data; name="file"; filename="test2.jpg"
+Content-Disposition: form-data; name="file"; filename="tes1.jpg"
 Content-Type: image/jpeg
 
-< ../face_recognition/user_face.jpg
+< ./face_recognition/user_face.jpg
 --FaceBoundary--
+

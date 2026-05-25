@@ -30,6 +30,9 @@ public class User implements UserDetails {
     @Column(name = "has_face_data")
     private boolean hasFaceData = false;
 
+    @Column(name = "wallet_address")
+    private String walletAddress;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

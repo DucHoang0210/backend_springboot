@@ -92,6 +92,12 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- Web3j for Blockchain Connection -->
+		<dependency>
+			<groupId>org.web3j</groupId>
+			<artifactId>core</artifactId>
+			<version>4.10.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
