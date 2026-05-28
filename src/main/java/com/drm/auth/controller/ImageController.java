@@ -36,7 +36,7 @@ public class ImageController {
 
     @PostConstruct
     public void init() {
-        File dir = new File(UPLOAD_DIR);
+        File dir = new File(UPLOAD_DIR).getAbsoluteFile();
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -56,7 +56,7 @@ public class ImageController {
             String hash = calculateSha256(bytes);
             
             // Lưu file vào thư mục uploads sử dụng hash làm tên file
-            File dest = new File(UPLOAD_DIR + File.separator + hash);
+            File dest = new File(UPLOAD_DIR + File.separator + hash).getAbsoluteFile();
             if (!dest.exists()) {
                 file.transferTo(dest);
             }
@@ -89,7 +89,7 @@ public class ImageController {
     @GetMapping("/raw/{hash}")
     public ResponseEntity<byte[]> getRawImage(@PathVariable String hash) {
         try {
-            File file = new File(UPLOAD_DIR + File.separator + hash);
+            File file = new File(UPLOAD_DIR + File.separator + hash).getAbsoluteFile();
             if (!file.exists()) {
                 return ResponseEntity.notFound().build();
             }
