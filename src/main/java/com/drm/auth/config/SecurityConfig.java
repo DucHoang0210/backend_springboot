@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/api/auth/**",
                         "/api/nfts/**",
+                        "/api/images/**",
                         "/v2/api-docs",
                         "/v3/api-docs",
                         "/v3/api-docs/**",
