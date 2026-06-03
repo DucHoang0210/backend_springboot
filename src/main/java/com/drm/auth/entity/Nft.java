@@ -34,6 +34,16 @@ public class Nft {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(precision = 18, scale = 8)
+    private java.math.BigDecimal price;
+
+    @Column(name = "is_listed")
+    @Builder.Default
+    private Boolean isListed = false;
+
+    @Column(name = "listing_type")
+    private String listingType; // FIXED hoặc AUCTION
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
